@@ -9,22 +9,49 @@
  * Originally version by Jelle Jager AKA TobyL - Make fields required
  * Updated by ncrossland to utilise simpler field handline of MM 0.3.5+; bring jQuery code into line; add indication to required fields
  * 
- * @uses ManagerManager plugin 0.5.
+ * @uses PHP >= 5.4.
+ * @uses (MODX)EvolutionCMS.plugins.ManagerManager >= 0.7.
  * 
- * @param $fields {stringCommaSeparated} — The name(s) of the document fields (or TVs) that are required. @required
- * @param $roles {stringCommaSeparated} — The roles that the widget is applied to (when this parameter is empty then widget is applied to the all roles).
- * @param $templates {stringCommaSeparated} — Id of the templates to which this widget is applied (when this parameter is empty then widget is applied to the all templates).
+ * @param $params {array_associative|stdClass} — The object of params. @required
+ * @param $params->fields {stringCommaSeparated} — The name(s) of the document fields (or TVs) that are required. @required
+ * @param $params->roles {stringCommaSeparated} — The roles that the widget is applied to (when this parameter is empty then widget is applied to the all roles).
+ * @param $params->templates {stringCommaSeparated} — Id of the templates to which this widget is applied (when this parameter is empty then widget is applied to the all templates).
  * 
  * @link https://code.divandesign.ru/modx/mm_requirefields
  * 
  * @copyright 2014
  */
 
-function mm_requireFields(
-	$fields,
-	$roles = '',
-	$templates = ''
-){
+function mm_requireFields($params){
+	//For backward compatibility
+	if (
+		func_num_args() > 1 ||
+		!is_array($params) &&
+		!is_object($params)
+	){
+		//Convert ordered list of params to named
+		$params = \ddTools::orderedParamsToNamed([
+			'paramsList' => func_get_args(),
+			'compliance' => [
+				'fields',
+				'roles',
+				'templates',
+			]
+		]);
+	}
+	
+	//Defaults
+	$params = \DDTools\ObjectTools::extend([
+		'objects' => [
+			(object) [
+				'fields' => '',
+				'roles' => '',
+				'templates' => ''
+			],
+			$params
+		]
+	]);
+	
 	global
 		$mm_fields,
 		$mm_current_page,
@@ -37,14 +64,14 @@ function mm_requireFields(
 	if (
 		$e->name == 'OnDocFormRender' &&
 		useThisRule(
-			$roles,
-			$templates
+			$params->roles,
+			$params->templates
 		)
 	){
 		//If we've been supplied with a string, convert it into an array
-		$fields = makeArray($fields);
+		$params->fields = makeArray($params->fields);
 		
-		if (count($fields) == 0){
+		if (count($params->fields) == 0){
 			return;
 		}
 		
@@ -59,7 +86,7 @@ function mm_requireFields(
 		$load_js = '';
 		
 		foreach (
-			$fields as
+			$params->fields as
 			$field
 		){
 			//Ignore for now
