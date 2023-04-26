@@ -11,40 +11,60 @@
  * 
  * @uses ManagerManager plugin 0.5.
  * 
- * @param $fields {comma separated string} - The name(s) of the document fields (or TVs) that are required. @required
- * @param $roles {comma separated string} - The roles that the widget is applied to (when this parameter is empty then widget is applied to the all roles).
- * @param $templates {comma separated string} - Id of the templates to which this widget is applied (when this parameter is empty then widget is applied to the all templates).
+ * @param $fields {stringCommaSeparated} — The name(s) of the document fields (or TVs) that are required. @required
+ * @param $roles {stringCommaSeparated} — The roles that the widget is applied to (when this parameter is empty then widget is applied to the all roles).
+ * @param $templates {stringCommaSeparated} — Id of the templates to which this widget is applied (when this parameter is empty then widget is applied to the all templates).
  * 
- * @link http://code.divandesign.biz/modx/mm_requirefields/1.2.5
+ * @link https://code.divandesign.ru/modx/mm_requirefields
  * 
  * @copyright 2014
  */
 
-function mm_requireFields($fields, $roles = '', $templates = ''){
-	global $mm_fields, $mm_current_page, $modx;
+function mm_requireFields(
+	$fields,
+	$roles = '',
+	$templates = ''
+){
+	global
+		$mm_fields,
+		$mm_current_page,
+		$modx
+	;
+	
 	$e = &$modx->Event;
 	
-	// if the current page is being edited by someone in the list of roles, and uses a template in the list of templates
-	if ($e->name == 'OnDocFormRender' && useThisRule($roles, $templates)){
-		// if we've been supplied with a string, convert it into an array
+	//If the current page is being edited by someone in the list of roles, and uses a template in the list of templates
+	if (
+		$e->name == 'OnDocFormRender' &&
+		useThisRule(
+			$roles,
+			$templates
+		)
+	){
+		//If we've been supplied with a string, convert it into an array
 		$fields = makeArray($fields);
 		
-		if (count($fields) == 0) return;
+		if (count($fields) == 0){
+			return;
+		}
 		
-		$output = "\n//  -------------- mm_requireFields :: Begin ------------- \n";
+		$output = '//---------- mm_requireFields :: Begin -----' . PHP_EOL;
 		
 		$output .= '
-		$j("head").append("<style>.mmRequired { background-image: none !important; background-color: #ff9999 !important; } .requiredIcon { color: #ff0000; font-weight: bold; margin-left: 3px; cursor: help; }</style>");
-		var requiredHTML = "<span class=\"requiredIcon\" title=\"Required\">*</span>";
+			$j("head").append("<style>.mmRequired { background-image: none !important; background-color: #ff9999 !important; } .requiredIcon { color: #ff0000; font-weight: bold; margin-left: 3px; cursor: help; }</style>");
+			var requiredHTML = "<span class=\"requiredIcon\" title=\"Required\">*</span>";
 		';
 		
 		$submit_js = '';
 		$load_js = '';
 		
-		foreach ($fields as $field){
-			//ignore for now
+		foreach (
+			$fields as
+			$field
+		){
+			//Ignore for now
 			switch ($field){
-				// fields for which this doesn't make sense - in my opinion anyway :)
+				//Fields for which this doesn't make sense
 				case 'keywords':
 				case 'metatags':
 				case 'hidemenu':
@@ -62,45 +82,53 @@ function mm_requireFields($fields, $roles = '', $templates = ''){
 				case 'clear_cache':
 				case 'content_type':
 				case 'content_dispo':
-				case 'which_editor':
 					$output .= '';
 				break;
-
-				// Pub/unpub dates don't have a type attribute on their input tag in 1.0.2, so add this. Won't do any harm to other versions
+				
+				//Pub/unpub dates don't have a type attribute on their input tag in 1.0.2, so add this. Won't do any harm to other versions
 				case 'pub_date':
 				case 'unpub_date':
 					$load_js .= '
-					$j("#pub_date, #unpub_date").each(function() { this.type = "text";  }); // Cant use jQuery attr function as datepicker class clashes with jQuery methods
+						//Cant use jQuery attr function as datepicker class clashes with jQuery methods
+						$j("#pub_date, #unpub_date").each(function(){this.type = "text";});
 					';
-				// no break, because we want to do the things below too.
-
-				// Ones that follow the regular pattern
+				//No break, because we want to do the things below too.
+				
+				//Ones that follow the regular pattern
 				default:
-					//if it's tv & it's not used in current template
-					if ($mm_fields[$field]['tv'] && tplUseTvs($mm_current_page['template'], $field) === false){
+					//If it's TV & it's not used in current template
+					if (
+						$mm_fields[$field]['tv'] &&
+						tplUseTvs(
+							$mm_current_page['template'],
+							$field
+						) === false
+					){
 						//Go to next field
 						continue;
 					}
 					
-					// What type is this field?
+					//What type is this field?
 					$fieldname = $mm_fields[$field]['fieldname'];
 					
-					// What jQuery selector should we use for this fieldtype?
+					//What jQuery selector should we use for this fieldtype?
 					switch ($mm_fields[$field]['fieldtype']){
 						case 'textarea':
-							$selector = "textarea[name=$fieldname]";
+							$selector = 'textarea[name=' . $fieldname . ']';
 						break;
 						
-						case 'input': // If it's an input, we only want to do something if it's a text field
-							$selector = "input[type=text][name=$fieldname],input[type=email][name=$fieldname]";
+						//If it's an input, we only want to do something if it's a text field
+						case 'input':
+							$selector = 'input[type=text][name=' . $fieldname . '],input[type=email][name=' . $fieldname. ']';
 						break;
 						
-						default:  // all other input types, do nothing
+						//All other input types, do nothing
+						default:
 							$selector = '';
 						break;
 					}
 					
-					// If we've found something we want to use
+					//If we've found something we want to use
 					if (!empty($selector)){
 						if ($field == 'content'){
 							$label = '$j("#content_header")';
@@ -112,14 +140,14 @@ function mm_requireFields($fields, $roles = '', $templates = ''){
 						
 						$submit_js .= '
 
-// The element we are targetting ('.$fieldname.')
-var $sel = $j("'.$selector.'");
+// The element we are targetting (' . $fieldname . ')
+var $sel = $j("' . $selector . '");
 
-'.$tinymcefix.'
+' . $tinymcefix . '
 // Check if its valid
 if($j.trim($sel.val()) == ""){// If it is empty
 	// Find the label (this will be easier in Evo 1.1 with more semantic code)
-	var lbl = '.$label.'.text().replace($j(requiredHTML).text(), "");
+	var lbl = ' . $label . '.text().replace($j(requiredHTML).text(), "");
 		
 	// Add the label to the errors array. Would be nice to say which tab it is on, but no
 	// easy way of doing this in 1.0.x as no semantic link between tabs and tab body
@@ -134,11 +162,11 @@ if($j.trim($sel.val()) == ""){// If it is empty
 						
 						$load_js .= '
 
-// Add an indicator this is required ('.$fieldname.')
-var $sel = $j("'.$selector.'");
+// Add an indicator this is required (' . $fieldname . ')
+var $sel = $j("' . $selector . '");
 
 // Find the label (this will be easier in Evo 1.1 with more semantic code)
-var $lbl = '.$label.'.append(requiredHTML);
+var $lbl = ' . $label . '.append(requiredHTML);
 
 						';
 					}
@@ -146,11 +174,11 @@ var $lbl = '.$label.'.append(requiredHTML);
 			}
 		}
 		
-		$output .= $load_js.'
+		$output .= $load_js . '
 $j("#mutate").submit(function(){
 	var errors = [];
 	
-'.$submit_js.'
+' . $submit_js . '
 	
 	if(errors.length > 0){
 		var errMsg = errors.length + " required fields are missing:\n\n ";
@@ -168,9 +196,9 @@ $j("#mutate").submit(function(){
 });
 		';
 		
-		$output .= "\n//  -------------- mm_requireFields :: End ------------- \n";
+		$output .= '//---------- mm_requireFields :: End -----' . PHP_EOL;
 		
-		$e->output($output . "\n");
+		$e->output($output);
 	}
 }
 ?>
