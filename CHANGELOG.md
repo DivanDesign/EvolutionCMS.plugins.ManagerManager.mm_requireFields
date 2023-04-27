@@ -1,6 +1,16 @@
 # (MODX)EvolutionCMS.plugins.ManagerManager.mm_requireFields changelog
 
 
+## Version 1.2.6 (2023-04-27)
+* \* Attention! PHP >= 5.4 is required.
+* \* Attention! (MODX)EvolutionCMS.plugins.ManagerManager >= 0.7 is required.
+* \* Refactoring, the widget now uses “named” parameters, see README → Examples (with backward compatibility).
+* \* Refactoring, compatibility with PHP >= 7.4.
+* \+ README, README_ru.
+* \+ CHANGELOG, CHANGELOG_ru.
+* \+ Composer.json.
+
+
 ## Version 1.2.5 (2014-02-13)
 * \+ Support for the `alias_visible` field has been added (for MODX > 1.0.11).
 

@@ -1,6 +1,16 @@
 # (MODX)EvolutionCMS.plugins.ManagerManager.mm_requireFields changelog
 
 
+## Версия 1.2.6 (2023-04-27)
+* \* Внимание! Требуется PHP >= 5.4 is required.
+* \* Внимание! Требуется (MODX)EvolutionCMS.plugins.ManagerManager >= 0.7.
+* \* Параметры: Виджет теперь использует «именованные» параметры, см. README → Примеры (обратная совместимость сохранена).
+* \* Рефакторинг, совместимость с PHP >= 7.4.
+* \+ README, README_ru.
+* \+ CHANGELOG, CHANGELOG_ru.
+* \+ Composer.json.
+
+
 ## Версия 1.2.5 (2014-02-13)
 * \+ Добавлена поддержка поля `alias_visible` (для MODX > 1.0.11).
 

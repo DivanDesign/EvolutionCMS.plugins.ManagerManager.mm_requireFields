@@ -1,13 +1,13 @@
 <?php
 /**
  * mm_requireFields
- * @version 1.2.5 (2014-02-13)
+ * @version 1.2.6 (2023-04-27)
  * 
  * @see README.md
  * 
  * @link https://code.divandesign.ru/modx/mm_requirefields
  * 
- * @copyright 2014
+ * @copyright 2011–2023
  */
 
 function mm_requireFields($params){

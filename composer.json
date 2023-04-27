@@ -1,6 +1,6 @@
 {
 	"name": "dd/evolutioncms-plugins-managermanager-mm_requirefields",
-	"version": "1.2.5",
+	"version": "1.2.6",
 	"description": "A widget for ManagerManager plugin that allows document fields (or TVs) to become required.",
 	"keywords": [
 		"modx",
