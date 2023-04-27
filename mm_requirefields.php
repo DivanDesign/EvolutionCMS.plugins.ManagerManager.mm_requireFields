@@ -51,15 +51,13 @@ function mm_requireFields($params){
 	
 	global
 		$mm_fields,
-		$mm_current_page,
 		$modx
 	;
 	
 	if ($modx->Event->name == 'OnDocFormRender'){
-		//If we've been supplied with a string, convert it into an array
-		$params->fields = makeArray($params->fields);
+		$params->fields = getTplMatchedFields($params->fields);
 		
-		if (count($params->fields) == 0){
+		if (empty($params->fields)){
 			return;
 		}
 		
@@ -111,18 +109,6 @@ function mm_requireFields($params){
 				
 				//Ones that follow the regular pattern
 				default:
-					//If it's TV & it's not used in current template
-					if (
-						$mm_fields[$field]['tv'] &&
-						tplUseTvs(
-							$mm_current_page['template'],
-							$field
-						) === false
-					){
-						//Go to next field
-						continue;
-					}
-					
 					//What type is this field?
 					$fieldname = $mm_fields[$field]['fieldname'];
 					
