@@ -12,7 +12,7 @@ The widget appends a red asterisk to a field to indicate it is required, and ale
 
 ## Installation
 
-To install you must unzip the archive to `/assets/plungins/managermanager/widgets/`.
+To install you must unzip the archive to `/assets/plungins/managermanager/widgets/mm_requirefields/`.
 
 
 You may also read this documentation:

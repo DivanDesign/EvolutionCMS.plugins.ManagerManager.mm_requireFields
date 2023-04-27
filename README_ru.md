@@ -12,7 +12,7 @@
 
 ## Установка
 
-Для установки распакуйте архив в `/assets/plungins/managermanager/widgets/`.
+Для установки распакуйте архив в `/assets/plungins/managermanager/widgets/mm_requirefields/`.
 
 
 Смотрите также документацию:
