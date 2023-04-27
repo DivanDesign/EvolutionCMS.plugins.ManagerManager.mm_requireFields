@@ -40,22 +40,22 @@ function mm_requireFields($params){
 		]
 	]);
 	
+	if (
+		!useThisRule(
+			$params->roles,
+			$params->templates
+		)
+	){
+		return;
+	}
+	
 	global
 		$mm_fields,
 		$mm_current_page,
 		$modx
 	;
 	
-	$e = &$modx->Event;
-	
-	//If the current page is being edited by someone in the list of roles, and uses a template in the list of templates
-	if (
-		$e->name == 'OnDocFormRender' &&
-		useThisRule(
-			$params->roles,
-			$params->templates
-		)
-	){
+	if ($modx->Event->name == 'OnDocFormRender'){
 		//If we've been supplied with a string, convert it into an array
 		$params->fields = makeArray($params->fields);
 		
@@ -213,7 +213,7 @@ $j("#mutate").submit(function(){
 		
 		$output .= '//---------- mm_requireFields :: End -----' . PHP_EOL;
 		
-		$e->output($output);
+		$modx->Event->output($output);
 	}
 }
 ?>
