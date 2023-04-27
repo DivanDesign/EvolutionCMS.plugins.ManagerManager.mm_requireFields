@@ -3,19 +3,7 @@
  * mm_requireFields
  * @version 1.2.5 (2014-02-13)
  * 
- * @desc A widget for ManagerManager plugin that allows document fields (or TVs) to become required. The widget appends a red asterisk to a field to indicate it is required, and alerts users if they save the document without completing all required fields.
- * 
- * Currently works with text fields only. In the future perhaps this could deal with other elements.
- * Originally version by Jelle Jager AKA TobyL - Make fields required
- * Updated by ncrossland to utilise simpler field handline of MM 0.3.5+; bring jQuery code into line; add indication to required fields
- * 
- * @uses PHP >= 5.4.
- * @uses (MODX)EvolutionCMS.plugins.ManagerManager >= 0.7.
- * 
- * @param $params {array_associative|stdClass} — The object of params. @required
- * @param $params->fields {stringCommaSeparated} — The name(s) of the document fields (or TVs) that are required. @required
- * @param $params->roles {stringCommaSeparated} — The roles that the widget is applied to (when this parameter is empty then widget is applied to the all roles).
- * @param $params->templates {stringCommaSeparated} — Id of the templates to which this widget is applied (when this parameter is empty then widget is applied to the all templates).
+ * @see README.md
  * 
  * @link https://code.divandesign.ru/modx/mm_requirefields
  * 
