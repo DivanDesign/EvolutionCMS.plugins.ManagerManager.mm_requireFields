@@ -11,13 +11,13 @@
  */
 
 function mm_requireFields($params){
-	//For backward compatibility
+	// For backward compatibility
 	if (
 		func_num_args() > 1 ||
 		!is_array($params) &&
 		!is_object($params)
 	){
-		//Convert ordered list of params to named
+		// Convert ordered list of params to named
 		$params = \ddTools::orderedParamsToNamed([
 			'paramsList' => func_get_args(),
 			'compliance' => [
@@ -28,7 +28,7 @@ function mm_requireFields($params){
 		]);
 	}
 	
-	//Defaults
+	// Defaults
 	$params = \DDTools\ObjectTools::extend([
 		'objects' => [
 			(object) [
@@ -61,7 +61,7 @@ function mm_requireFields($params){
 			return;
 		}
 		
-		$output = '//---------- mm_requireFields :: Begin -----' . PHP_EOL;
+		$output = '// ---------- mm_requireFields :: Begin -----' . PHP_EOL;
 		
 		$output .= '
 			$j("head").append("<style>.mmRequired { background-image: none !important; background-color: #ff9999 !important; } .requiredIcon { color: #ff0000; font-weight: bold; margin-left: 3px; cursor: help; }</style>");
@@ -75,9 +75,9 @@ function mm_requireFields($params){
 			$params->fields as
 			$field
 		){
-			//Ignore for now
+			// Ignore for now
 			switch ($field){
-				//Fields for which this doesn't make sense
+				// Fields for which this doesn't make sense
 				case 'keywords':
 				case 'metatags':
 				case 'hidemenu':
@@ -98,38 +98,38 @@ function mm_requireFields($params){
 					$output .= '';
 				break;
 				
-				//Pub/unpub dates don't have a type attribute on their input tag in 1.0.2, so add this. Won't do any harm to other versions
+				// Pub/unpub dates don't have a type attribute on their input tag in 1.0.2, so add this. Won't do any harm to other versions
 				case 'pub_date':
 				case 'unpub_date':
 					$load_js .= '
-						//Cant use jQuery attr function as datepicker class clashes with jQuery methods
+						// Cant use jQuery attr function as datepicker class clashes with jQuery methods
 						$j("#pub_date, #unpub_date").each(function(){this.type = "text";});
 					';
-				//No break, because we want to do the things below too.
+				// No break, because we want to do the things below too.
 				
-				//Ones that follow the regular pattern
+				// Ones that follow the regular pattern
 				default:
-					//What type is this field?
+					// What type is this field?
 					$fieldname = $mm_fields[$field]['fieldname'];
 					
-					//What jQuery selector should we use for this fieldtype?
+					// What jQuery selector should we use for this fieldtype?
 					switch ($mm_fields[$field]['fieldtype']){
 						case 'textarea':
 							$selector = 'textarea[name=' . $fieldname . ']';
 						break;
 						
-						//If it's an input, we only want to do something if it's a text field
+						// If it's an input, we only want to do something if it's a text field
 						case 'input':
 							$selector = 'input[type=text][name=' . $fieldname . '],input[type=email][name=' . $fieldname. ']';
 						break;
 						
-						//All other input types, do nothing
+						// All other input types, do nothing
 						default:
 							$selector = '';
 						break;
 					}
 					
-					//If we've found something we want to use
+					// If we've found something we want to use
 					if (!empty($selector)){
 						if ($field == 'content'){
 							$label = '$j("#content_header")';
@@ -197,7 +197,7 @@ $j("#mutate").submit(function(){
 });
 		';
 		
-		$output .= '//---------- mm_requireFields :: End -----' . PHP_EOL;
+		$output .= '// ---------- mm_requireFields :: End -----' . PHP_EOL;
 		
 		$modx->Event->output($output);
 	}
